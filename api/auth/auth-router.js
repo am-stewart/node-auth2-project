@@ -7,6 +7,15 @@ const jwt = require('jsonwebtoken')
 
 
 router.post("/register", validateRoleName, (req, res, next) => {
+  let user = req.body
+  const hash = bcrypt.hashSync(user.password, 8)
+  user.password = hash
+
+  Users.add(user)
+    .then(user => {
+      res.status(201).json(user)
+    })
+    .catch(next)
   /**
     [POST] /api/auth/register { "username": "anna", "password": "1234", "role_name": "angel" }
 
